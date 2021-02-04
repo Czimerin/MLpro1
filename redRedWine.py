@@ -42,5 +42,4 @@ knn = KNeighborsClassifier(n_neighbors=3)
 knn.fit(xTrain,np.ravel(yTrain,order='C'))
 result = knn.predict(xTest)
 
-
 print(accuracy_score(yTest, result))
