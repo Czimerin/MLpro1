@@ -13,6 +13,12 @@ import numpy as np
 import matplotlib
 
 
+distanceMetric = ["euclidean", "manhattan", "chebyshev"]
+userDistanceMetric = input("Enter number of distacne metric to use: \n 1. euclidean \n 2. manhattan \n 3. chebyshev \n \n")
+userDistanceMetric = int(userDistanceMetric)
+print("\n\n you have chosen: " + distanceMetric[userDistanceMetric - 1])
+
+
 #reads in the csv files 
 redWine = pd.read_csv("red.csv")
 whiteWine = pd.read_csv("white.csv")
@@ -38,7 +44,7 @@ labels = bothRnW.iloc[:,[12]]
 #Split the data into randow train and test subsets
 xTrain, xTest, yTrain, yTest = train_test_split(data,labels, test_size=0.4, random_state=1 )
 
-knn = KNeighborsClassifier(n_neighbors=3)
+knn = KNeighborsClassifier(n_neighbors=3, metric = distanceMetric[userDistanceMetric - 1])
 knn.fit(xTrain,np.ravel(yTrain,order='C'))
 result = knn.predict(xTest)
 
