@@ -16,7 +16,16 @@ import matplotlib
 distanceMetric = ["euclidean", "manhattan", "chebyshev"]
 userDistanceMetric = input("Enter number of distacne metric to use: \n 1. euclidean \n 2. manhattan \n 3. chebyshev \n \n")
 userDistanceMetric = int(userDistanceMetric)
-print("\n\n you have chosen: " + distanceMetric[userDistanceMetric - 1])
+
+
+
+userTestSize = input("Enter a number between 0 and 1 fot the percentage of the data will be used in the tesing pool \n \n")
+testSize = float(userTestSize)
+
+print("_______________________________________________________________________")
+print("\nyou have chosen: " + distanceMetric[userDistanceMetric - 1])
+print("\nfor the test percentage you have chosen: " + str(testSize*100) +"%\n")
+print("\nfor the training percentage you have chosen: " + str((1 - testSize)*100) +"%\n")
 
 
 #reads in the csv files 
@@ -36,16 +45,22 @@ redWine.rename(columns={'fixed acidity': 'fixed_acidity','citric acid':'citric_a
 whiteWine.rename(columns={'fixed acidity': 'fixed_acidity','citric acid':'citric_acid','volatile acidity':'volatile_acidity','residual sugar':'residual_sugar','free sulfur dioxide':'free_sulfur_dioxide','total sulfur dioxide':'total_sulfur_dioxide'}, inplace=True)
 bothRnW.rename(columns={'fixed acidity': 'fixed_acidity','citric acid':'citric_acid','volatile acidity':'volatile_acidity','residual sugar':'residual_sugar','free sulfur dioxide':'free_sulfur_dioxide','total sulfur dioxide':'total_sulfur_dioxide'}, inplace=True)
 
+print("\nattributes in the dataset: "+ str(len(bothRnW.columns)))
+
+print("\nnumber of instances of red wine in the data: " + str(len(redWine.index)))
+
+print("\nnumber of instances of white wine in the data: " + str(len(whiteWine.index)))
+
 #takes the first 12 columns of data for trainig
 data = bothRnW.iloc[:,[0,1,2,3,4,5,6,7,8,9,10,11]]
 #takes the last column color for trainig
 labels = bothRnW.iloc[:,[12]]
 
 #Split the data into randow train and test subsets
-xTrain, xTest, yTrain, yTest = train_test_split(data,labels, test_size=0.4, random_state=1 )
+xTrain, xTest, yTrain, yTest = train_test_split(data,labels, test_size=testSize, random_state=1 )
 
 knn = KNeighborsClassifier(n_neighbors=3, metric = distanceMetric[userDistanceMetric - 1])
 knn.fit(xTrain,np.ravel(yTrain,order='C'))
 result = knn.predict(xTest)
 
-print(accuracy_score(yTest, result))
+print("\naccuracy of this run: " + str(accuracy_score(yTest, result)))
