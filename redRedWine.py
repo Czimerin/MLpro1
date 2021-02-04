@@ -8,6 +8,7 @@ import pandas as pd
 from sklearn.model_selection import cross_validate
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
 import numpy as np
 import matplotlib
 
@@ -37,7 +38,8 @@ labels = bothRnW.iloc[:,[12]]
 xTrain, xTest, yTrain, yTest = train_test_split(data,labels, test_size=0.4, random_state=1 )
 
 knn = KNeighborsClassifier(n_neighbors=3)
-knn.fit(xTrain,yTrain)
-knn.predict(xTest)
+knn.fit(xTrain,np.ravel(yTrain,order='C'))
+result = knn.predict(xTest)
 
 
+print(accuracy_score(yTest, result))
