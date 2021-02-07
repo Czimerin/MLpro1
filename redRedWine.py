@@ -9,8 +9,13 @@ from sklearn.model_selection import cross_validate
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
+from matplotlib.colors import ListedColormap
 import numpy as np
-import matplotlib
+from sklearn.metrics import confusion_matrix
+import matplotlib.pyplot as plt
+
+cmap_light = ListedColormap(['red', 'gray'])
+
 
 
 distanceMetric = ["euclidean", "manhattan", "chebyshev"]
@@ -33,9 +38,9 @@ redWine = pd.read_csv("red.csv")
 whiteWine = pd.read_csv("white.csv")
 
 #adds a color column with the vaule R
-redWine["color"] = "R"
+redWine["color"] = "0"
 #adds a color column with the vaule W
-whiteWine["color"] ="W"
+whiteWine["color"] ="1"
 
 #adds both dataframes into one dataframe
 bothRnW=pd.concat([redWine, whiteWine],axis=0)
@@ -52,9 +57,20 @@ print("\nnumber of instances of red wine in the data: " + str(len(redWine.index)
 print("\nnumber of instances of white wine in the data: " + str(len(whiteWine.index)))
 
 #takes the first 12 columns of data for trainig
-data = bothRnW.iloc[:,[0,1,2,3,4,5,6,7,8,9,10,11]]
+data = bothRnW.iloc[:, [0, 8]]
 #takes the last column color for trainig
-labels = bothRnW.iloc[:,[12]]
+labels = bothRnW.iloc[:, [12]]
+
+dataMin = data.min()
+dataMax = data.max()
+h=0.2
+
+xMin = dataMin.get(key = 'fixed_acidity')
+xMax = dataMax.get(key = 'fixed_acidity')
+
+yMin = dataMin.get(key = 'pH')
+yMax = dataMax.get(key = 'pH')
+
 
 #Split the data into randow train and test subsets
 xTrain, xTest, yTrain, yTest = train_test_split(data,labels, test_size=testSize, random_state=1 )
@@ -62,5 +78,16 @@ xTrain, xTest, yTrain, yTest = train_test_split(data,labels, test_size=testSize,
 knn = KNeighborsClassifier(n_neighbors=3, metric = distanceMetric[userDistanceMetric - 1])
 knn.fit(xTrain,np.ravel(yTrain,order='C'))
 result = knn.predict(xTest)
+
+xx, yy = np.meshgrid(np.arange(xMin, xMax, h), np.arange(yMin, yMax, h))
+Z = knn.predict(np.c_[xx.ravel(), yy.ravel()])
+
+Z = Z.reshape(xx.shape)
+plt.figure(figsize=(8, 6))
+
+
+plt.contourf(xx, yy, Z, cmap=cmap_light)
+plt.scatter(data.fixed_acidity, data.pH, 3, labels.color)
+
 
 print("\naccuracy of this run: " + str(accuracy_score(yTest, result)))
