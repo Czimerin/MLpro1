@@ -88,6 +88,10 @@ plt.figure(figsize=(8, 6))
 
 plt.contourf(xx, yy, Z, cmap=cmap_light)
 plt.scatter(data.fixed_acidity, data.pH, 3, labels.color)
+plt.ylabel('pH')
+plt.xlabel('Fixed Acidity')
+plt.title("Red and White wines")
 
+plt.show()
 
 print("\naccuracy of this run: " + str(accuracy_score(yTest, result)))
