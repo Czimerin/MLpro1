@@ -79,7 +79,7 @@ knn = KNeighborsClassifier(n_neighbors=3, metric = distanceMetric[userDistanceMe
 knn.fit(xTrain,np.ravel(yTrain,order='C'))
 result = knn.predict(xTest)
 
-xx, yy = np.meshgrid(np.arange(xMin, xMax, h), np.arange(yMin, yMax, h))
+xx, yy = np.meshgrid(np.arange(xMin-1, xMax+1, h), np.arange(yMin-1, yMax+1, h))
 Z = knn.predict(np.c_[xx.ravel(), yy.ravel()])
 
 Z = Z.reshape(xx.shape)
