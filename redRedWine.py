@@ -75,19 +75,22 @@ yMax = dataMax.get(key = 'pH')
 
 #Split the data into randow train and test subsets
 xTrain, xTest, yTrain, yTest = train_test_split(data,labels, test_size=testSize, random_state=1 )
-
+#set number of neighbors to use and Distance metric
 knn = KNeighborsClassifier(n_neighbors=3, metric = distanceMetric[userDistanceMetric - 1])
+#train the model
 knn.fit(xTrain,np.ravel(yTrain,order='C'))
+#test the model
 result = knn.predict(xTest)
 
+#create prediction map
 xx, yy = np.meshgrid(np.arange(xMin-1, xMax+1, h), np.arange(yMin-1, yMax+1, h))
+#fill prediction map
 Z = knn.predict(np.c_[xx.ravel(), yy.ravel()])
-
+# fit map to the plot
 Z = Z.reshape(xx.shape)
+
+#create plot
 plt.figure(figsize=(8, 6),facecolor='#aaa')
-
-
-
 plt.contourf(xx, yy, Z, cmap=cmap_light)
 plt.scatter(data.fixed_acidity, data.pH, 3, labels.color)
 plt.ylabel('pH')
