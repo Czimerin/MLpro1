@@ -2,7 +2,7 @@
 """
 Created on Tue Feb  2 11:59:16 2021
 
-@author: nickk
+@author: Nick Kogovsek
          Fred Fikter
 """
 import pandas as pd
