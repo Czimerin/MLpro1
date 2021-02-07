@@ -4,6 +4,7 @@ Created on Tue Feb  2 11:59:16 2021
 
 @author: Nick Kogovsek
          Fred Fikter
+         ~Sankarshan Araujo
 """
 import pandas as pd
 from sklearn.model_selection import cross_validate
@@ -57,9 +58,10 @@ print("\nnumber of instances of red wine in the data: " + str(len(redWine.index)
 
 print("\nnumber of instances of white wine in the data: " + str(len(whiteWine.index)))
 
-#takes the first 12 columns of data for trainig
-data = bothRnW.iloc[:, [0, 8]]
-#takes the last column color for trainig
+#takes the first 12 columns of data for training
+#data = bothRnW.iloc[:, [0, 8]]
+data = bothRnW.iloc[:, [0, 8, 11]]
+#takes the last column color for training
 labels = bothRnW.iloc[:, [12]]
 
 dataMin = data.min()
@@ -83,20 +85,39 @@ knn.fit(xTrain,np.ravel(yTrain,order='C'))
 result = knn.predict(xTest)
 
 #create prediction map
-xx, yy = np.meshgrid(np.arange(xMin-1, xMax+1, h), np.arange(yMin-1, yMax+1, h))
+#xx, yy = np.meshgrid(np.arange(xMin-1, xMax+1, h), np.arange(yMin-1, yMax+1, h))
 #fill prediction map
-Z = knn.predict(np.c_[xx.ravel(), yy.ravel()])
+#Z = knn.predict(np.c_[xx.ravel(), yy.ravel()])
 # fit map to the plot
-Z = Z.reshape(xx.shape)
+#Z = Z.reshape(xx.shape)
 
 #create plot
-plt.figure(figsize=(8, 6),facecolor='#aaa')
-plt.contourf(xx, yy, Z, cmap=cmap_light)
-plt.scatter(data.fixed_acidity, data.pH, 3, labels.color)
-plt.ylabel('pH')
-plt.xlabel('Fixed Acidity')
-plt.title("Red and White wines")
+#plt.figure(figsize=(8, 6),facecolor='#aaa')
+#plt.contourf(xx, yy, Z, cmap=cmap_light)
+#plt.scatter(data.fixed_acidity, data.pH, 3, labels.color)
+#plt.ylabel('pH')
+#plt.xlabel('Fixed Acidity')
+#plt.title("Red and White wines")
 
+#plt.show()
+
+fig = plt.figure(figsize=(10, 7))
+ax = plt.axes(projection='3d')
+ax.grid(b = True, color ='grey', linestyle ='-.', linewidth = 0.3, alpha = 0.2)
+my_cmap = plt.get_cmap('hsv')
+
+ax.set_xlabel('fixed acidity', fontweight ='bold')
+ax.set_ylabel('pH', fontweight ='bold')
+ax.set_zlabel('quality', fontweight ='bold')
+plt.title("Red Wine + White wine")
+x = data.fixed_acidity
+y = data.pH
+z = data.quality
+sctt = ax.scatter3D(data.fixed_acidity, data.pH, data.quality,
+                    alpha = 0.8, c = (x + y + z),
+                    cmap = my_cmap,
+                    marker ='^', )
+fig.colorbar(sctt, ax = ax, shrink = 0.5, aspect = 5)
 plt.show()
 
 print("\naccuracy of this run: " + str(accuracy_score(yTest, result)))
