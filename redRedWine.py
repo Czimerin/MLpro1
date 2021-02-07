@@ -3,6 +3,7 @@
 Created on Tue Feb  2 11:59:16 2021
 
 @author: nickk
+         Fred Fikter
 """
 import pandas as pd
 from sklearn.model_selection import cross_validate
@@ -24,7 +25,7 @@ userDistanceMetric = int(userDistanceMetric)
 
 
 
-userTestSize = input("Enter a number between 0 and 1 fot the percentage of the data will be used in the tesing pool \n \n")
+userTestSize = input("Enter a number between 0 and 1 for the percentage of the data to be used in the testing pool \n \n")
 testSize = float(userTestSize)
 
 print("_______________________________________________________________________")
@@ -33,7 +34,7 @@ print("\nfor the test percentage you have chosen: " + str(testSize*100) +"%\n")
 print("\nfor the training percentage you have chosen: " + str((1 - testSize)*100) +"%\n")
 
 
-#reads in the csv files 
+#reads in the csv files
 redWine = pd.read_csv("red.csv")
 whiteWine = pd.read_csv("white.csv")
 
@@ -83,7 +84,8 @@ xx, yy = np.meshgrid(np.arange(xMin-1, xMax+1, h), np.arange(yMin-1, yMax+1, h))
 Z = knn.predict(np.c_[xx.ravel(), yy.ravel()])
 
 Z = Z.reshape(xx.shape)
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(8, 6),facecolor='#aaa')
+
 
 
 plt.contourf(xx, yy, Z, cmap=cmap_light)
