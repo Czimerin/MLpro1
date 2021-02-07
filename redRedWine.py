@@ -60,6 +60,7 @@ print("\nnumber of instances of white wine in the data: " + str(len(whiteWine.in
 
 #takes the first 12 columns of data for training
 data = bothRnW.iloc[:, [0, 8]]
+#takes data for 3d scatterplot
 data3d = bothRnW.iloc[:, [0, 8, 11]]
 #takes the last column color for training
 labels = bothRnW.iloc[:, [12]]
@@ -104,8 +105,7 @@ plt.title("Red and White wines")
 #create plot
 fig = plt.figure(figsize=(10, 7))
 ax = plt.axes(projection='3d')
-ax.grid(b = True, color ='grey', linestyle ='-.', linewidth = 0.3, alpha = 0.2)
-my_cmap = plt.get_cmap('hsv')
+ax.grid(b = True, color ='grey', linestyle ='-.', linewidth = 2, alpha = 0.3)
 
 #set labels
 ax.set_xlabel('fixed acidity', fontweight ='bold')
@@ -118,10 +118,10 @@ x = data3d.fixed_acidity
 y = data3d.pH
 z = data3d.quality
 sctt = ax.scatter3D(data3d.fixed_acidity, data3d.pH, data3d.quality,
-                    alpha = 0.8, c = (x + y + z),
-                    cmap = my_cmap,
+                    alpha = 1, c = (x + y + z),
+                    cmap = cmap_light,
                     marker ='^', )
-fig.colorbar(sctt, ax = ax, shrink = 0.5, aspect = 5)
+fig.colorbar(sctt, ax = ax, shrink = .5, aspect = 10)
 plt.show()
 
 print("\naccuracy of this run: " + str(accuracy_score(yTest, result)))
